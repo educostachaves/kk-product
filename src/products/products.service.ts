@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product, ProductDocument } from './products.schema';
+import { ProductDTO } from './products.dto';
 import { IProduct } from './products.interface';
 import { Model } from 'mongoose';
 
@@ -8,12 +9,9 @@ import { Model } from 'mongoose';
 export class ProductService {
   constructor(@InjectModel(Product.name) public ProductModel: Model<ProductDocument>) {}
 
-  async create(createProduct: IProduct): Promise<Record<string, any>> {
+  async create(createProduct: ProductDTO): Promise<Record<string, any>> {
     const createdProduct = new this.ProductModel(createProduct);
-    return {
-      status: 200,
-      data: createdProduct.save(),
-    };
+    return createdProduct.save();
   }
 
   async findAll(): Promise<Product[]> {
